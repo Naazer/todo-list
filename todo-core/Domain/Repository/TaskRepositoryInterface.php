@@ -19,7 +19,7 @@ interface TaskRepositoryInterface
      * @return Task
      * @throws TaskNotFoundException
      */
-    public function find($id): Task;
+    public function findById($id): Task;
 
     /**
      * Find all tasks
