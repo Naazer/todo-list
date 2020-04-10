@@ -2,6 +2,7 @@
 
 namespace TodoCore\Domain\Repository;
 
+use TodoCore\Application\Task\Exception\TaskSavingException;
 use TodoCore\Domain\Entity\Task;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 
@@ -49,6 +50,7 @@ interface TaskRepositoryInterface
      * @param Task $task
      *
      * @return void
+     * @throws TaskSavingException
      */
     public function save(Task $task);
 }

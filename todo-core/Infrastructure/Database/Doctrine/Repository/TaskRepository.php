@@ -2,12 +2,13 @@
 
 namespace TodoCore\Infrastructure\Database\Doctrine\Repository;
 
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use TodoCore\Domain\Entity\Task;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Domain\Repository\TaskRepositoryInterface;
+use TodoCore\Application\Task\Exception\TaskSavingException;
 
 /**
  * Class TaskRepository
@@ -62,13 +63,13 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
         try {
             $this->getEntityManager()->persist($task);
         } catch (ORMInvalidArgumentException $e) {
-            throw new \Exception($e->getMessage());
+            throw new TaskSavingException($e->getMessage());
         }
 
         try {
             $this->getEntityManager()->flush();
         } catch (OptimisticLockException $e) {
-            throw new \Exception($e->getMessage());
+            throw new TaskSavingException($e->getMessage());
         }
 
 
