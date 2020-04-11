@@ -4,7 +4,11 @@ namespace TodoCore\Application\Task;
 
 use TodoCore\Domain\Entity\Task;
 use TodoCore\Domain\Factory\TaskFactory;
+use TodoCore\Domain\Validator\TaskValidator;
 use TodoCore\Domain\Exception\TaskNotFoundException;
+use TodoCore\Domain\Exception\TaskNameEmptyException;
+use TodoCore\Domain\Exception\TaskCompletionException;
+use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Domain\Repository\TaskRepositoryInterface;
 use TodoCore\Application\Task\Exception\TaskSavingException;
 
@@ -32,6 +36,11 @@ class Command
     protected $factory;
 
     /**
+     * @var TaskValidator
+     */
+    protected $validator;
+
+    /**
      * Command constructor.
      *
      * @param TaskRepositoryInterface $repository
@@ -39,7 +48,8 @@ class Command
     public function __construct(TaskRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->factory = new TaskFactory();
+        $this->factory = new TaskFactory($this->repository);
+        $this->validator = new TaskValidator($this->repository);
     }
 
     /**
@@ -49,12 +59,18 @@ class Command
      *
      * @return Task
      *
+     * @throws TaskNameEmptyException
+     * @throws TaskNameExistedException
      * @throws TaskSavingException
      */
     public function createNewTask(string $name): Task
     {
         // Init Task object
-        $task = $this->factory->create($name);
+        try {
+            $task = $this->factory->create($name);
+        } catch (TaskNameExistedException|TaskNameEmptyException $exception) {
+            throw $exception;
+        }
 
         // Persist Task object into repository
         try {
@@ -85,7 +101,8 @@ class Command
             throw $e;
         }
 
-        // Update Task status to completed
+        // todo: validate ability to start task
+        // Update Task status to in-progress
         $task->setStatus(Task::STATUS_IN_PROGRESS);
 
         // Try to save Task object into repository
@@ -107,6 +124,7 @@ class Command
      *
      * @throws TaskNotFoundException
      * @throws TaskSavingException
+     * @throws TaskCompletionException
      */
     public function completeTask($id) : Task
     {
@@ -117,7 +135,13 @@ class Command
             throw $e;
         }
 
-        // TODO: add validator about the task should be in In-Progress status before completed
+        // Validate ability to complete task
+        try {
+            $this->validator->validateAbilityCompleteTask($task);
+        } catch (TaskCompletionException $exception) {
+            throw $exception;
+        }
+
         // Update Task status to completed
         $task->setStatus(Task::STATUS_COMPLETED);
 
