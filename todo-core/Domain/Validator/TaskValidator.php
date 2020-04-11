@@ -3,11 +3,13 @@
 namespace TodoCore\Domain\Validator;
 
 use TodoCore\Domain\Entity\Task;
+use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNameEmptyException;
 use TodoCore\Domain\Exception\TaskCompletionException;
 use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Domain\Repository\TaskRepositoryInterface;
 use TodoCore\Domain\Specification\TaskNameIsUniqueSpec;
+use TodoCore\Domain\Specification\TaskCouldBeStartedSpec;
 use TodoCore\Domain\Specification\TaskNameIsNotEmptySpec;
 use TodoCore\Domain\Specification\TaskCouldBeCompletedSpec;
 
@@ -63,12 +65,34 @@ class TaskValidator
      * @return bool
      * @throws TaskCompletionException
      */
-    public function validateAbilityCompleteTask(Task $task): bool
+    public function validateAbilityToCompleteTask(Task $task): bool
     {
         $spec = new TaskCouldBeCompletedSpec($task);
         if (!$spec->isSatisfied()) {
             $msg = sprintf('This task <%s> cannot be completed, as it must first be <%s>.', $task->getName(), Task::STATUS_IN_PROGRESS);
             throw new TaskCompletionException($msg);
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate ability to start Task
+     * Task can be completed only:
+     *  - if his status is in backlog now
+     *  - if other tasks that are in progress are not found.
+     *
+     * @param Task $task
+     *
+     * @return bool
+     * @throws TaskStartingException
+     */
+    public function validateAbilityToStartTask(Task $task): bool
+    {
+        $spec = new TaskCouldBeStartedSpec($this->repository, $task);
+        if (!$spec->isSatisfied()) {
+            $msg = sprintf('This task <%s> cannot be started.', $task->getName());
+            throw new TaskStartingException($msg);
         }
 
         return true;

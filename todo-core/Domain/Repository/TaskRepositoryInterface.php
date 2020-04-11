@@ -33,6 +33,13 @@ interface TaskRepositoryInterface
     public function findByName(string $name): Task;
 
     /**
+     * Find a Task with status in-progress
+     * @return Task
+     * @throws TaskNotFoundException
+     */
+    public function findTaskInProgress(): Task;
+
+    /**
      * Find all tasks
      *
      * @return array

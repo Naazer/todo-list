@@ -19,7 +19,7 @@ class TaskNameIsUniqueSpec implements SpecificationInterface
      *
      * @var TaskRepositoryInterface
      */
-    protected $repository;
+    private $repository;
 
     /**
      * @var string
@@ -44,7 +44,6 @@ class TaskNameIsUniqueSpec implements SpecificationInterface
         $this->name = $name;
         $this->id = $id;
     }
-
 
     /**
      * @inheritDoc

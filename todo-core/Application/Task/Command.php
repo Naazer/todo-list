@@ -5,6 +5,7 @@ namespace TodoCore\Application\Task;
 use TodoCore\Domain\Entity\Task;
 use TodoCore\Domain\Factory\TaskFactory;
 use TodoCore\Domain\Validator\TaskValidator;
+use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Domain\Exception\TaskNameEmptyException;
 use TodoCore\Domain\Exception\TaskCompletionException;
@@ -91,6 +92,7 @@ class Command
      *
      * @throws TaskNotFoundException
      * @throws TaskSavingException
+     * @throws TaskStartingException
      */
     public function startTask($id): Task
     {
@@ -101,7 +103,13 @@ class Command
             throw $e;
         }
 
-        // todo: validate ability to start task
+        // Validate ability to start task
+        try {
+            $this->validator->validateAbilityToStartTask($task);
+        } catch (TaskStartingException $exception) {
+            throw $exception;
+        }
+
         // Update Task status to in-progress
         $task->setStatus(Task::STATUS_IN_PROGRESS);
 
@@ -137,7 +145,7 @@ class Command
 
         // Validate ability to complete task
         try {
-            $this->validator->validateAbilityCompleteTask($task);
+            $this->validator->validateAbilityToCompleteTask($task);
         } catch (TaskCompletionException $exception) {
             throw $exception;
         }

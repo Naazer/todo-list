@@ -34,6 +34,21 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function findTaskInProgress(): Task
+    {
+        /** @var Task $task */
+        $task = $this->findOneBy(['status' => Task::STATUS_IN_PROGRESS]);
+
+        if (null === $task) {
+            throw new TaskNotFoundException("Task with status in-progress not found");
+        }
+
+        return $task;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findByName(string $name): Task
     {
         // TODO: Implement findByName() method.
