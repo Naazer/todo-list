@@ -2,9 +2,9 @@
 
 namespace TodoCore\Domain\Repository;
 
-use TodoCore\Application\Task\Exception\TaskSavingException;
 use TodoCore\Domain\Entity\Task;
 use TodoCore\Domain\Exception\TaskNotFoundException;
+use TodoCore\Application\Task\Exception\TaskSavingException;
 
 /**
  * Interface TaskRepositoryInterface
@@ -21,6 +21,16 @@ interface TaskRepositoryInterface
      * @throws TaskNotFoundException
      */
     public function findById($id): Task;
+
+    /**
+     * Find a Task by name
+     *
+     * @param string $name
+     *
+     * @return Task
+     * @throws TaskNotFoundException
+     */
+    public function findByName(string $name): Task;
 
     /**
      * Find all tasks

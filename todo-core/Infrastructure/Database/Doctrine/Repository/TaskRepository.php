@@ -34,6 +34,14 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function findByName(string $name): Task
+    {
+        // TODO: Implement findByName() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findAll(): array
     {
         return parent::findAll();
