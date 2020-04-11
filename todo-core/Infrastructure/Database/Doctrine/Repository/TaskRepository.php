@@ -4,6 +4,7 @@ namespace TodoCore\Infrastructure\Database\Doctrine\Repository;
 
 use TodoCore\Domain\Entity\Task;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
@@ -51,7 +52,14 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
      */
     public function findByName(string $name): Task
     {
-        // TODO: Implement findByName() method.
+        /** @var Task $task */
+        $task = $this->findBy(['name' => $name]);
+
+        if (null === $task) {
+            throw new TaskNotFoundException("Task with name: <$name> not found");
+        }
+
+        return $task;
     }
 
     /**
@@ -75,7 +83,12 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
      */
     public function findAllUnCompleted()
     {
-        return $this->findBy(['status' => Task::STATUS_BACKLOG]);
+        $expression = Criteria::expr()->in('status', [Task::STATUS_BACKLOG, Task::STATUS_IN_PROGRESS]);
+
+        return $this->createQueryBuilder('task')
+            ->andWhere($expression)
+            ->getQuery()
+            ->execute();
     }
 
     /**
