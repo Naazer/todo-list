@@ -1,6 +1,6 @@
 <?php
 
-namespace TodoCLI;
+namespace TodoApp\CLIBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -2,5 +2,5 @@
 
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
-    TodoCLI\CLIBundle::class => ['all' => true]
+    TodoApp\CLIBundle\CLIBundle::class => ['all' => true]
 ];
