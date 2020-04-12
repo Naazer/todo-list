@@ -21,7 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "TodoCore\\": "../todo-core/",
+            "TodoCLI\\": "src/CLIBundle/"
         }
     },
     "autoload-dev": {
