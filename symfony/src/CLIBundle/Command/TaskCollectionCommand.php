@@ -72,7 +72,8 @@ class TaskCollectionCommand extends Command
             $output->writeln('<options=bold>TodoApp: Completed tasks:</>');
             foreach ($completedTasks as $completedTask) {
                 /** @var Task $completedTask */
-                $output->writeln($completedTask->getId() . ' - ' . $completedTask->getName() . ' -> done');
+                $msg = sprintf('[%s] <fg=blue>%s</> -> done', $completedTask->getId(), $completedTask->getName());
+                $output->writeln($msg);
             }
         }
 

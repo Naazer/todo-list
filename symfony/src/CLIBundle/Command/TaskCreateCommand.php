@@ -62,9 +62,8 @@ class TaskCreateCommand extends Command
             $output->writeln(sprintf('<options=bold>TodoApp: Task <fg=green>%s</> created with ID <%s></>', $task->getName(), $task->getId()));
 
         } catch (TaskNameExistedException|TaskNameEmptyException|TaskSavingException $exception) {
-            $output->writeln(sprintf('<error>TodoApp ERROR type: <%s></error>', get_class($exception)));
-            $output->writeln(sprintf('<error>TodoApp ERROR message: <%s></error>', get_class($exception->getMessage())));
-            throw $exception;
+            $output->writeln(sprintf('<error>TodoApp ERROR type: %s</error>', get_class($exception)));
+            $output->writeln(sprintf('<error>TodoApp ERROR message: %s</error>', $exception->getMessage()));
         }
 
         return 0;

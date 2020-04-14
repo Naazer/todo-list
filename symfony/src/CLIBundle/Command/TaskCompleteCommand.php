@@ -5,6 +5,7 @@ namespace TodoApp\CLIBundle\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use TodoCore\Domain\Exception\TaskCompletionException;
 use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Application\Task\Command as TaskCommand;
@@ -14,7 +15,7 @@ use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Application\Task\Exception\TaskSavingException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
-class TaskStartCommand extends Command
+class TaskCompleteCommand extends Command
 {
     /**
      * @var TaskCommand
@@ -22,7 +23,7 @@ class TaskStartCommand extends Command
     private $taskCommand;
 
     /**
-     * TaskStartCommand constructor.
+     * TaskCompleteCommand constructor.
      * @param TaskCommand $taskCommand
      */
     public function __construct(TaskCommand $taskCommand)
@@ -36,8 +37,8 @@ class TaskStartCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('todo-app:task:start')
-            ->setDescription('Start Task')
+            ->setName('todo-app:task:complete')
+            ->setDescription('Complete Task')
             ->addArgument('id', InputArgument::REQUIRED, 'Task ID');
     }
 
@@ -57,13 +58,13 @@ class TaskStartCommand extends Command
         } catch (InvalidArgumentException $exception) {
             throw $exception;
         }
-        $output->writeln(sprintf('<info>TodoApp: Task starting with id <%s> ... </info>', $id));
+        $output->writeln(sprintf('<info>TodoApp: Task completing with id <%s> ... </info>', $id));
 
         try {
-            $task = $this->taskCommand->startTask($id);
-            $output->writeln(sprintf('<options=bold>TodoApp: Task <fg=green>%s</> started</>', $task->getName()));
+            $task = $this->taskCommand->completeTask($id);
+            $output->writeln(sprintf('<options=bold>TodoApp: Task <fg=green>%s</> completed</>', $task->getName()));
 
-        } catch (TaskNotFoundException|TaskStartingException|TaskSavingException $exception) {
+        } catch (TaskNotFoundException|TaskCompletionException|TaskSavingException $exception) {
             $output->writeln(sprintf('<error>TodoApp ERROR type: %s</error>', get_class($exception)));
             $output->writeln(sprintf('<error>TodoApp ERROR message: %s</error>', $exception->getMessage()));
         }
