@@ -60,7 +60,8 @@ class TaskCollectionCommand extends Command
             $table->setHeaders(['ID', 'Name', 'Status']);
             foreach ($uncompletedTasks as $uncompletedTask) {
                 /** @var Task $uncompletedTask */
-                $table->addRow([$uncompletedTask->getId(), $uncompletedTask->getName(), $uncompletedTask->getStatus()]);
+                $statusRow = $uncompletedTask->isInProgress() ? '<fg=green>%s</>' : '%s';
+                $table->addRow([$uncompletedTask->getId(), $uncompletedTask->getName(), sprintf($statusRow, $uncompletedTask->getStatus())]);
             }
             $table->render();
         }

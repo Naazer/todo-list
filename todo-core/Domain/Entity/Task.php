@@ -84,4 +84,28 @@ class Task
     {
         $this->status = $status;
     }
+
+    /**
+     * @return bool
+     */
+    public function isInProgress(): bool
+    {
+        return Task::STATUS_IN_PROGRESS == $this->getStatus();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return Task::STATUS_COMPLETED == $this->getStatus();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInBacklog(): bool
+    {
+        return Task::STATUS_BACKLOG == $this->getStatus();
+    }
 }

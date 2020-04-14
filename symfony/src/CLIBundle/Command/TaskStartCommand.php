@@ -5,6 +5,8 @@ namespace TodoApp\CLIBundle\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use TodoCore\Domain\Exception\TaskStartingException;
+use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Application\Task\Command as TaskCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TodoCore\Domain\Exception\TaskNameEmptyException;
@@ -12,7 +14,7 @@ use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Application\Task\Exception\TaskSavingException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
-class TaskCreateCommand extends Command
+class TaskStartCommand extends Command
 {
     /**
      * @var TaskCommand
@@ -20,7 +22,7 @@ class TaskCreateCommand extends Command
     private $taskCommand;
 
     /**
-     * TaskCreateCommand constructor.
+     * TaskStartCommand constructor.
      * @param TaskCommand $taskCommand
      */
     public function __construct(TaskCommand $taskCommand)
@@ -34,9 +36,9 @@ class TaskCreateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('todo-app:task:create')
-            ->setDescription('Create Task')
-            ->addArgument('name', InputArgument::REQUIRED, 'Task name');
+            ->setName('todo-app:task:start')
+            ->setDescription('Start Task')
+            ->addArgument('id', InputArgument::REQUIRED, 'Task ID');
     }
 
     /**
@@ -51,17 +53,17 @@ class TaskCreateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $name = $input->getArgument('name');
+            $id = $input->getArgument('id');
         } catch (InvalidArgumentException $exception) {
             throw $exception;
         }
-        $output->writeln(sprintf('<info>TodoApp: Task creation started with name <%s> ... </info>', $name));
+        $output->writeln(sprintf('<info>TodoApp: Task starting with id <%s> ... </info>', $id));
 
         try {
-            $task = $this->taskCommand->createNewTask($name);
-            $output->writeln(sprintf('<options=bold>TodoApp: Task <fg=green>%s</> created with ID <%s></>', $task->getName(), $task->getId()));
+            $task = $this->taskCommand->startTask($id);
+            $output->writeln(sprintf('<options=bold>TodoApp: Task <fg=green>%s</> started</>', $task->getName()));
 
-        } catch (TaskNameExistedException|TaskNameEmptyException|TaskSavingException $exception) {
+        } catch (TaskNotFoundException|TaskStartingException|TaskSavingException $exception) {
             $output->writeln(sprintf('<error>TodoApp ERROR type: <%s></error>', get_class($exception)));
             $output->writeln(sprintf('<error>TodoApp ERROR message: <%s></error>', get_class($exception->getMessage())));
             throw $exception;

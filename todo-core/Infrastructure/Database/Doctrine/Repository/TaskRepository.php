@@ -23,7 +23,7 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     public function findById($id): Task
     {
         /** @var Task $task */
-        $task = $this->findById($id);
+        $task = $this->find($id);
 
         if (null === $task) {
             throw new TaskNotFoundException("Task with ID: $id doesnt exist");
