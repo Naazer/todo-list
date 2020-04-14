@@ -53,7 +53,7 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     public function findByName(string $name): Task
     {
         /** @var Task $task */
-        $task = $this->findBy(['name' => $name]);
+        $task = $this->findOneBy(['name' => $name]);
 
         if (null === $task) {
             throw new TaskNotFoundException("Task with name: <$name> not found");

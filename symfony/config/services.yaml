@@ -6,16 +6,23 @@
 parameters:
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # TodoCore services
-    TodoCore\:
-        resource: '../../todo-core/*'
+
+    TodoCore\Application\Task\Command:
+        autowire: true
+
+    TodoCore\Domain\Repository\TaskRepositoryInterface:
+        class: TodoCore\Infrastructure\Database\Doctrine\Repository\TaskRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['TodoCore\Domain\Entity\Task']
 
     # Cli Bundle services
+
     TodoApp\CLIBundle\Command\:
         resource: '../src/CLIBundle/Command/*'
+        autowire: true
+        tags:
+            - { name: console.command }
+
 
