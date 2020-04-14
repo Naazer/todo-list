@@ -8,9 +8,6 @@ use Symfony\Component\Console\Command\Command;
 use TodoCore\Application\Task\Query as TaskQuery;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TodoCore\Domain\Exception\TaskNameEmptyException;
-use TodoCore\Domain\Exception\TaskNameExistedException;
-use TodoCore\Application\Task\Exception\TaskSavingException;
 
 class TaskCollectionCommand extends Command
 {
@@ -44,9 +41,6 @@ class TaskCollectionCommand extends Command
      * @param OutputInterface $output
      *
      * @return int|void|null
-     * @throws TaskNameEmptyException
-     * @throws TaskNameExistedException
-     * @throws TaskSavingException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

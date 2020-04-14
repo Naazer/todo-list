@@ -5,13 +5,11 @@ namespace TodoApp\CLIBundle\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use TodoCore\Domain\Exception\TaskCompletionException;
 use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Application\Task\Command as TaskCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TodoCore\Domain\Exception\TaskNameEmptyException;
-use TodoCore\Domain\Exception\TaskNameExistedException;
+use TodoCore\Domain\Exception\TaskCompletionException;
 use TodoCore\Application\Task\Exception\TaskSavingException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 

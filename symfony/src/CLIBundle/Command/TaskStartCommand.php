@@ -9,8 +9,6 @@ use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Application\Task\Command as TaskCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use TodoCore\Domain\Exception\TaskNameEmptyException;
-use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Application\Task\Exception\TaskSavingException;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
