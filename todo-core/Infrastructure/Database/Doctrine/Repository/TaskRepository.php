@@ -83,10 +83,11 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
      */
     public function findAllUnCompleted()
     {
-        $expression = Criteria::expr()->in('status', [Task::STATUS_BACKLOG, Task::STATUS_IN_PROGRESS]);
+        $queryBuilder = $this->createQueryBuilder('t');
+        $expression = $queryBuilder->expr()->in('t.status', [Task::STATUS_BACKLOG, Task::STATUS_IN_PROGRESS]);
 
-        return $this->createQueryBuilder('task')
-            ->andWhere($expression)
+        return $queryBuilder
+            ->where($expression)
             ->getQuery()
             ->execute();
     }

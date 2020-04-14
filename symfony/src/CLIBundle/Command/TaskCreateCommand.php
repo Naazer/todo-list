@@ -14,8 +14,6 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 class TaskCreateCommand extends Command
 {
-    protected static $defaultName = 'todo-app:task:create';
-
     /**
      * @var TaskCommand
      */
@@ -57,15 +55,15 @@ class TaskCreateCommand extends Command
         } catch (InvalidArgumentException $exception) {
             throw $exception;
         }
-        $output->writeln(sprintf('TodoApp: Task creation started with name <%s>', $name));
+        $output->writeln(sprintf('<info>TodoApp: Task creation started with name <%s> ... </info>', $name));
 
         try {
             $task = $this->taskCommand->createNewTask($name);
-            $output->writeln(sprintf('TodoApp: Task created with ID <%s>', $task->getId()));
+            $output->writeln(sprintf('<options=bold>TodoApp: Task created with ID <%s></>', $task->getId()));
 
         } catch (TaskNameExistedException|TaskNameEmptyException|TaskSavingException $exception) {
-            $output->writeln(sprintf('TodoApp ERROR type: <%s>', get_class($exception)));
-            $output->writeln(sprintf('TodoApp ERROR message: <%s>', get_class($exception->getMessage())));
+            $output->writeln(sprintf('<error>TodoApp ERROR type: <%s></error>', get_class($exception)));
+            $output->writeln(sprintf('<error>TodoApp ERROR message: <%s></error>', get_class($exception->getMessage())));
             throw $exception;
         }
 
