@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+    php:
+        build:
+            context: ./docker/php
+            args:
+                COMPOSER_VERSION: "1.10.5"
+        depends_on:
+            - db
+        volumes:
+            - .:/var/www/todo-list:delegated
+            - ./symfony/var/logs:/var/log/todo-list:delegated
+        expose:
+            - "9000"
+        env_file:
+            ./symfony/.env
+
+    nginx:
+        build:
+            context: ./docker/nginx
+            args:
+                NGINX_VERSION: "1.17.9"
+        depends_on:
+            - php
+        volumes:
+            - .:/var/www/todo-list:delegated
+            - ./symfony/var/logs:/var/log/nginx:delegated
+        ports:
+            - "80:80"
+
+    db:
+        image: postgres:12
+        volumes:
+            - db:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        env_file:
+            ./symfony/.env
+
+volumes:
+    db:
