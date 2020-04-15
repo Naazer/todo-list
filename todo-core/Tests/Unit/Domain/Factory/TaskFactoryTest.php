@@ -32,8 +32,6 @@ class TaskFactoryTest extends TestCase
         $this->repositoryMock = $this->getMockBuilder(TaskRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-
     }
 
     public function testPositiveCreate()
