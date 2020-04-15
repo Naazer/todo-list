@@ -4,8 +4,11 @@ namespace TodoCore\Tests\Unit\Domain\Validator;
 
 use PHPUnit\Framework\TestCase;
 use TodoCore\Domain\Entity\Task;
+use TodoCore\Domain\Exception\TaskNotFoundException;
 use TodoCore\Domain\Validator\TaskValidator;
+use TodoCore\Domain\Exception\TaskStartingException;
 use TodoCore\Domain\Exception\TaskNameEmptyException;
+use TodoCore\Domain\Exception\TaskCompletionException;
 use TodoCore\Domain\Exception\TaskNameExistedException;
 use TodoCore\Domain\Repository\TaskRepositoryInterface;
 
@@ -72,5 +75,62 @@ class TaskValidatorTest extends TestCase
 
         $this->expectException(TaskNameExistedException::class);
         $taskValidator->validateName($name, 1);
+    }
+
+    public function testValidateAbilityToCompleteTaskPositive()
+    {
+        $taskValidator = new TaskValidator($this->repositoryMock);
+
+        $task = new Task();
+        $task->setName('Test name');
+        $task->setStatus(Task::STATUS_IN_PROGRESS);
+
+        $valid = $taskValidator->validateAbilityToCompleteTask($task);
+
+        $this->assertTrue($valid);
+    }
+
+    public function testValidateAbilityToCompleteTaskNegative()
+    {
+        $taskValidator = new TaskValidator($this->repositoryMock);
+
+        $task = new Task();
+        $task->setName('Test name');
+
+        $this->expectException(TaskCompletionException::class);
+        $taskValidator->validateAbilityToCompleteTask($task);
+    }
+
+    public function testValidateAbilityToStartTaskPositive()
+    {
+        /*
+         * Prepare mocks
+         */
+        $this->repositoryMock
+            ->expects($this->once())
+            ->method('findTaskInProgress')
+            ->withAnyParameters()
+            ->willThrowException(new TaskNotFoundException());
+
+        $taskValidator = new TaskValidator($this->repositoryMock);
+
+        $task = new Task();
+        $task->setName('Test name');
+
+        $valid = $taskValidator->validateAbilityToStartTask($task);
+
+        $this->assertTrue($valid);
+    }
+
+    public function testValidateAbilityToStartTaskNegative()
+    {
+        $taskValidator = new TaskValidator($this->repositoryMock);
+
+        $task = new Task();
+        $task->setName('Test name');
+        $task->setStatus(Task::STATUS_COMPLETED);
+
+        $this->expectException(TaskStartingException::class);
+        $taskValidator->validateAbilityToStartTask($task);
     }
 }
