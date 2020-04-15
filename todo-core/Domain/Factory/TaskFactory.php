@@ -28,11 +28,12 @@ class TaskFactory
      * TaskFactory constructor.
      *
      * @param TaskRepositoryInterface $repository
+     * @param TaskValidator $validator
      */
-    public function __construct(TaskRepositoryInterface $repository)
+    public function __construct(TaskRepositoryInterface $repository, TaskValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator = new TaskValidator($this->repository);
+        $this->validator = $validator;
     }
 
 

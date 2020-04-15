@@ -49,8 +49,8 @@ class Command
     public function __construct(TaskRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->factory = new TaskFactory($this->repository);
         $this->validator = new TaskValidator($this->repository);
+        $this->factory = new TaskFactory($this->repository, $this->validator);
     }
 
     /**
