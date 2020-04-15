@@ -1,15 +1,17 @@
 {
-    "name": "Naazer/todo-list",
+    "name": "naazer/todo-list",
     "description": "Naazer Todo list application",
     "license": "proprietary",
     "type": "project",
     "autoload": {
         "psr-4": {
-          "todo-core\\": "TodoCore/"
+          ".\\": "TodoCore/"
         },
         "classmap": []
     },
     "require": {
       "php": ">=7.2"
+    },
+    "require-dev": {
     }
 }

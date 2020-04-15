@@ -1,13 +1,16 @@
-FROM php:7.2-fpm-stretch
+FROM php:7.2-fpm
 
 COPY ./symfony.ini /usr/local/etc/php/conf.d
 COPY ./symfony.pool.conf /usr/local/etc/php-fpm.d/
 
 RUN apt-get update && apt-get install -y \
+    git \
+    libicu-dev \
     libmcrypt-dev \
     libpq-dev \
-    libmcrypt-dev \
-    libxml2-dev
+    libxml2-dev \
+    zlib1g-dev \
+    libzip-dev
 
 RUN docker-php-ext-install \
     bcmath \
@@ -15,6 +18,8 @@ RUN docker-php-ext-install \
     intl \
     opcache \
     pgsql \
+    soap \
+    zip \
     pdo_pgsql
 
 ARG COMPOSER_VERSION
