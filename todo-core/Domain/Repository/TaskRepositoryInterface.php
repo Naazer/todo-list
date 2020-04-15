@@ -40,6 +40,12 @@ interface TaskRepositoryInterface
     public function findTaskInProgress(): Task;
 
     /**
+     * Find a Tasks with status backlog
+     * @return array
+     */
+    public function findBacklogTasks(): array;
+
+    /**
      * Find all tasks
      *
      * @return array

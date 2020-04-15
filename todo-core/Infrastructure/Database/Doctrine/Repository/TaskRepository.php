@@ -35,21 +35,6 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findTaskInProgress(): Task
-    {
-        /** @var Task $task */
-        $task = $this->findOneBy(['status' => Task::STATUS_IN_PROGRESS]);
-
-        if (null === $task) {
-            throw new TaskNotFoundException("Task with status in-progress not found");
-        }
-
-        return $task;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findByName(string $name): Task
     {
         /** @var Task $task */
@@ -65,9 +50,24 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findAll(): array
+    public function findTaskInProgress(): Task
     {
-        return parent::findAll();
+        /** @var Task $task */
+        $task = $this->findOneBy(['status' => Task::STATUS_IN_PROGRESS]);
+
+        if (null === $task) {
+            throw new TaskNotFoundException("Task with status in-progress not found");
+        }
+
+        return $task;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findBacklogTasks(): array
+    {
+        return $this->findBy(['status' => Task::STATUS_BACKLOG]);
     }
 
     /**
@@ -76,6 +76,14 @@ class TaskRepository extends EntityRepository implements TaskRepositoryInterface
     public function findAllCompleted()
     {
         return $this->findBy(['status' => Task::STATUS_COMPLETED]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return parent::findAll();
     }
 
     /**
