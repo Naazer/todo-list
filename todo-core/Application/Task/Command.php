@@ -45,12 +45,14 @@ class Command
      * Command constructor.
      *
      * @param TaskRepositoryInterface $repository
+     * @param TaskValidator $validator
+     * @param TaskFactory $factory
      */
-    public function __construct(TaskRepositoryInterface $repository)
+    public function __construct(TaskRepositoryInterface $repository, TaskValidator $validator, TaskFactory $factory)
     {
         $this->repository = $repository;
-        $this->validator = new TaskValidator($this->repository);
-        $this->factory = new TaskFactory($this->repository, $this->validator);
+        $this->validator = $validator;
+        $this->factory = $factory;
     }
 
     /**
