@@ -38,6 +38,7 @@ Project structure
     - Tests
 - symfony
     - src/CLIBundle
+    - src/APIBundle
 - docker
  
 
@@ -49,6 +50,15 @@ Available commands:
  * Get list of tasks with statuses collection: `docker-compose exec php bin/console todo-app:task:collection`
  * Start task: `docker-compose exec php bin/console todo-app:task:start 1`
  * Complete task: `docker-compose exec php bin/console todo-app:task:complete 1`
+ 
+API Bundle
+----------------------------------
+
+Available endpoints:
+ * Create task: `curl -d "name=Task1" -X POST http://todo.loc/tasks/create`
+ * Get list of tasks with statuses collection: @todo
+ * Start task: @todo
+ * Complete task: @todo
 
 Tests
 ----------------------------------
