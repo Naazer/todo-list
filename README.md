@@ -56,9 +56,9 @@ API Bundle
 
 Available endpoints:
  * Create task: `curl -d "name=Task1" -X POST http://todo.loc/tasks/create`
- * Get list of tasks with statuses collection: @todo
- * Start task: @todo
- * Complete task: @todo
+ * Get list of tasks with statuses collection: `curl -X GET http://todo.loc/tasks`
+ * Start task: `curl -X GET http://todo.loc/tasks/1/start`
+ * Complete task: `curl -X GET http://todo.loc/tasks/1/complete`
 
 Tests
 ----------------------------------

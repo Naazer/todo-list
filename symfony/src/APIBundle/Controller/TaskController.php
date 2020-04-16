@@ -64,7 +64,7 @@ class TaskController
     /**
      * Get collection of Tasks
      *
-     * @Route("/collection", methods={"GET"}, name="collection")
+     * @Route("/", methods={"GET"}, name="collection")
      *
      * @param Query $query
      *
