@@ -6,7 +6,7 @@ namespace TodoCore\Domain\Entity;
  * Class Task
  * @package TodoCore\Domain\Entity
  */
-class Task
+class Task implements \JsonSerializable
 {
     /**
      * Statuses
@@ -107,5 +107,17 @@ class Task
     public function isInBacklog(): bool
     {
         return Task::STATUS_BACKLOG == $this->getStatus();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'status' => $this->getStatus()
+        ];
     }
 }

@@ -25,7 +25,8 @@
     "autoload": {
         "psr-4": {
             "TodoCore\\": "../todo-core/",
-            "TodoApp\\CLIBundle\\": "src/CLIBundle"
+            "TodoApp\\CLIBundle\\": "src/CLIBundle",
+            "TodoApp\\APIBundle\\": "src/APIBundle"
         },
         "classmap": [
             "bin/Kernel.php"
