@@ -28,13 +28,13 @@ class TaskController
      */
     public function create(Request $request, Command $command)
     {
-        $name = $request->get('name');
+        $name = $request->get('name') ?? '';
 
         $errors = [];
         try {
             $task = $command->createNewTask($name);
         } catch (TaskNameExistedException|TaskNameEmptyException|TaskSavingException $exception) {
-            return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['errors' => [$exception->getMessage()]], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($task, Response::HTTP_OK);

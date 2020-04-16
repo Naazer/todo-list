@@ -34,4 +34,10 @@ services:
         tags:
             - { name: console.command }
 
+    # API Bundle services
 
+    TodoApp\APIBundle\Controller\:
+        resource: '../src/APIBundle/Controller/*'
+        tags: ['controller.service_arguments']
+        autowire: true
+        autoconfigure: true
